@@ -1,0 +1,70 @@
+﻿<Window x:Class="PaintMVPByMe.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PaintMVPByMe"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="550" Width="800">
+    <Window.Resources>
+    <BitmapImage x:Key="Line" UriSource="images/line_image.png"/>
+    <BitmapImage x:Key="Curve" UriSource="images/crivaya_image.png"/>
+    <BitmapImage x:Key="Circle" UriSource="images/circle_image.png"/>
+    <BitmapImage x:Key="Rectangle" UriSource="images/squared_image.png"/>
+
+    <Style x:Key="ButtonImage" TargetType="Button">
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Image Source="{TemplateBinding Content}"/>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    </Window.Resources>
+    
+    <DockPanel>
+        <Menu x:Name="menu1" DockPanel.Dock="Top">
+            <MenuItem Header="File">
+                <MenuItem x:Name="menuOpen" Header="Open"/>
+                <MenuItem x:Name="menuSave" Header="Save"/>
+                <MenuItem x:Name="menuSaveAs" Header="Save As"/>
+                <MenuItem x:Name="menuPrint" Header="Print"/>
+                <MenuItem Header="Exit"/>
+            </MenuItem>
+        </Menu>
+        <Canvas Background="#bbede6" DockPanel.Dock="Top" Height="100" VerticalAlignment="Top">
+            <Image x:Name="current_figure_image" Height="50" Width="50" Canvas.Left="201" Canvas.Top="25"/>
+            <GroupBox Background="AliceBlue" Header="Фигуры" Height="80" Width="200" Margin="280 10">
+                <WrapPanel>
+                    <Button Content="{StaticResource Line}" Style="{StaticResource ButtonImage}" Click="select_figure_Click" x:Name="select_line" Margin="2" Height="20" Width="20"/>
+                    <Button Content="{StaticResource Rectangle}" Style="{StaticResource ButtonImage}" Click="select_figure_Click" x:Name="select_curve" Margin="2" Height="20" Width="20"/>
+                    <Button Content="{StaticResource Circle}" Style="{StaticResource ButtonImage}" Click="select_figure_Click" x:Name="select_circle" Margin="2" Height="20" Width="20"/>
+                    <Button Content="{StaticResource Curve}" Style="{StaticResource ButtonImage}" Click="select_figure_Click" x:Name="select_square" Margin="2" Height="20" Width="20"/>
+
+                </WrapPanel>
+            </GroupBox>
+            <GroupBox Background="AliceBlue" Header="Цвета" Height="80" Width="200" Margin="500 10">
+                <WrapPanel>
+                    <Button Click="Choose_Color_Button_Click" Margin="2" Background="Black" Height="20" Width="20"/>
+                    <Button Click="Choose_Color_Button_Click" Margin="2" Background="White" Height="20" Width="20"/>
+                    <Button Click="Choose_Color_Button_Click" Margin="2" Background="Red" Height="20" Width="20"/>
+                    <Button Click="Choose_Color_Button_Click" Margin="2" Background="Green" Height="20" Width="20"/>
+                    <Button Click="Choose_Color_Button_Click" Margin="2" Background="Blue" Height="20" Width="20"/>
+                    <Button Click="Choose_Color_Button_Click" Margin="2" Background="Gold" Height="20" Width="20"/>
+                    <Button Click="Choose_Color_Button_Click" Margin="2" Background="DarkBlue" Height="20" Width="20"/>
+                    <Button Click="Choose_Color_Button_Click" Margin="2" Background="Purple" Height="20" Width="20"/>
+                    <Button Click="Choose_Color_Button_Click" Margin="2" Background="DarkRed" Height="20" Width="20"/>
+                </WrapPanel>
+            </GroupBox>
+        </Canvas>
+        <Canvas x:Name="main_draw_canvas" DockPanel.Dock="Bottom"  Background="White"
+                MouseDown="main_draw_canvas_MouseDown"
+                MouseUp="main_draw_canvas_MouseUp"
+                MouseMove="main_draw_canvas_MouseMove"
+                MouseEnter="main_draw_canvas_MouseEnter" 
+                MouseLeave="main_draw_canvas_MouseLeave"
+                MouseRightButtonDown="main_draw_canvas_MouseRightButtonDown">
+        </Canvas>
+    </DockPanel>
+</Window>
