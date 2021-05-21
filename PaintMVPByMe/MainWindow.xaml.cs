@@ -1,23 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace PaintMVPByMe
 {
     public partial class MainWindow : Window
     {
-
         public bool isEllipse = false;
         public bool isRectangle = false;
         public bool isLine = false;
@@ -27,6 +18,7 @@ namespace PaintMVPByMe
         LineGeometry line1;
         RectangleGeometry rectangle;
         Path path;
+        int thickness = 1;
         Point leftTopPoint, startEllipsePoint;
         Rect rect;
         EllipseGeometry ellipse;
@@ -34,21 +26,11 @@ namespace PaintMVPByMe
         public MainWindow()
         {
             InitializeComponent();
-
-        }
-
-        private void main_draw_canvas_MouseEnter(object sender, MouseEventArgs e)
-        {
-            Mouse.OverrideCursor = Cursors.Pen;
-        }
-
-        private void main_draw_canvas_MouseLeave(object sender, MouseEventArgs e)
-        {
-            Mouse.OverrideCursor = Cursors.Arrow;
         }
 
         private void main_draw_canvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
+
             if (isLine)
             {
                draw_line(e, 1, colorValue);
@@ -61,16 +43,16 @@ namespace PaintMVPByMe
             {
                 drawElipse(e, 1, colorValue);
             }
-            else
-            {
-                MessageBox.Show("Choose the Figure!");
-            }
         }
 
         private void main_draw_canvas_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            main_draw_canvas.Children.Remove(path);
-            main_draw_canvas.Children.Add(path);
+            if (isLine | isRectangle | isEllipse)
+            {
+                main_draw_canvas.Children.Remove(path);
+                main_draw_canvas.Children.Add(path);
+            }
+
 
         }
 
@@ -119,6 +101,7 @@ namespace PaintMVPByMe
             }
             path = new Path();
             path.Stroke = colorValue;
+            path.StrokeThickness = thickness;
             path.Data = line1;
             main_draw_canvas.Children.Add(path);
         }
@@ -181,7 +164,7 @@ namespace PaintMVPByMe
 
             path = new Path();
             path.Stroke = colorValue;
-            path.StrokeThickness = 1;
+            path.StrokeThickness = thickness;
 
             GeometryGroup myGeometryGroup2 = new GeometryGroup();
             myGeometryGroup2.Children.Add(rectangle);
@@ -214,6 +197,7 @@ namespace PaintMVPByMe
             }
             path = new Path();
             path.Stroke = colorValue;
+            path.StrokeThickness = thickness;
             path.Data = ellipse;
             main_draw_canvas.Children.Add(path);
         }
@@ -227,14 +211,29 @@ namespace PaintMVPByMe
                     isLine = true;
                     isEllipse = false;
                     isRectangle = false;
+                    main_draw_canvas.EditingMode = InkCanvasEditingMode.None;
                     break;
                 case "select_circle":
                     isEllipse = true;
                     isLine = false;
                     isRectangle = false;
+                    main_draw_canvas.EditingMode = InkCanvasEditingMode.None;
                     break;
                 case "select_square":
+                    main_draw_canvas.EditingMode = InkCanvasEditingMode.None;
                     isRectangle = true;
+                    isLine = false;
+                    isEllipse = false;
+                    break;
+                case "clear_button":
+                    main_draw_canvas.EditingMode = InkCanvasEditingMode.EraseByPoint;
+                    isRectangle = false;
+                    isLine = false;
+                    isEllipse = false;
+                    break;
+                case "pen_button":
+                    main_draw_canvas.EditingMode = InkCanvasEditingMode.Ink;
+                    isRectangle = false;
                     isLine = false;
                     isEllipse = false;
                     break;
@@ -250,7 +249,20 @@ namespace PaintMVPByMe
             if (backgroundColor is SolidColorBrush)
             {
                 colorValue = (SolidColorBrush)backgroundColor;
+                main_draw_canvas.DefaultDrawingAttributes.Color = ((SolidColorBrush)colorValue).Color;
             }
+        }
+
+        private void StrokeThicknessList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox comboBox = (ComboBox)sender;
+            thickness = comboBox.SelectedIndex + 1;
+            main_draw_canvas.DefaultDrawingAttributes.Width = thickness;
+        }
+
+        private void fill_figure_button_Click(object sender, RoutedEventArgs e)
+        {
+
         }
 
         private void main_draw_canvas_MouseRightButtonDown(object sender, MouseButtonEventArgs e)

@@ -7,22 +7,22 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="550" Width="800">
     <Window.Resources>
-    <BitmapImage x:Key="Line" UriSource="images/line_image.png"/>
-    <BitmapImage x:Key="Curve" UriSource="images/crivaya_image.png"/>
-    <BitmapImage x:Key="Circle" UriSource="images/circle_image.png"/>
-    <BitmapImage x:Key="Rectangle" UriSource="images/squared_image.png"/>
+        <BitmapImage x:Key="Line" UriSource="images/line_image.png"/>
+        <BitmapImage x:Key="Curve" UriSource="images/crivaya_image.png"/>
+        <BitmapImage x:Key="Circle" UriSource="images/circle_image.png"/>
+        <BitmapImage x:Key="Rectangle" UriSource="images/squared_image.png"/>
 
-    <Style x:Key="ButtonImage" TargetType="Button">
-        <Setter Property="ContentTemplate">
-            <Setter.Value>
-                <DataTemplate>
-                    <Image Source="{TemplateBinding Content}"/>
-                </DataTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
+        <Style x:Key="ButtonImage" TargetType="Button">
+            <Setter Property="ContentTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <Image Source="{TemplateBinding Content}"/>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
-    
+
     <DockPanel>
         <Menu x:Name="menu1" DockPanel.Dock="Top">
             <MenuItem Header="File">
@@ -34,14 +34,31 @@
             </MenuItem>
         </Menu>
         <Canvas Background="#bbede6" DockPanel.Dock="Top" Height="100" VerticalAlignment="Top">
-            <Image x:Name="current_figure_image" Height="50" Width="50" Canvas.Left="201" Canvas.Top="25"/>
+            <Button x:Name="fill_figure_button" Click="fill_figure_button_Click" Height="50" Width="50" Canvas.Left="100" Canvas.Top="20">
+                <Button.Content>
+                    <Image Source="images/line_image.png"/>
+                </Button.Content>
+            </Button>
+            <ComboBox Name="StrokeThicknessList" Height="20" Width="90" Canvas.Left="170" Canvas.Top="20" SelectionChanged="StrokeThicknessList_SelectionChanged">
+                <TextBlock>1</TextBlock>
+                <TextBlock>2</TextBlock>
+                <TextBlock>3</TextBlock>
+                <TextBlock>4</TextBlock>
+                <TextBlock>5</TextBlock>
+                <TextBlock>6</TextBlock>
+                <TextBlock>7</TextBlock>
+                <TextBlock>8</TextBlock>
+                <TextBlock>9</TextBlock>
+                <TextBlock>10</TextBlock>
+            </ComboBox>
             <GroupBox Background="AliceBlue" Header="Фигуры" Height="80" Width="200" Margin="280 10">
                 <WrapPanel>
                     <Button Content="{StaticResource Line}" Style="{StaticResource ButtonImage}" Click="select_figure_Click" x:Name="select_line" Margin="2" Height="20" Width="20"/>
                     <Button Content="{StaticResource Rectangle}" Style="{StaticResource ButtonImage}" Click="select_figure_Click" x:Name="select_curve" Margin="2" Height="20" Width="20"/>
                     <Button Content="{StaticResource Circle}" Style="{StaticResource ButtonImage}" Click="select_figure_Click" x:Name="select_circle" Margin="2" Height="20" Width="20"/>
                     <Button Content="{StaticResource Curve}" Style="{StaticResource ButtonImage}" Click="select_figure_Click" x:Name="select_square" Margin="2" Height="20" Width="20"/>
-
+                    <Button x:Name="clear_button" Click="select_figure_Click" Margin="2" Height="20" Width="20"/>
+                    <Button x:Name="pen_button" Click="select_figure_Click" Height="20" Width="20" Margin="2"/>
                 </WrapPanel>
             </GroupBox>
             <GroupBox Background="AliceBlue" Header="Цвета" Height="80" Width="200" Margin="500 10">
@@ -58,13 +75,11 @@
                 </WrapPanel>
             </GroupBox>
         </Canvas>
-        <Canvas x:Name="main_draw_canvas" DockPanel.Dock="Bottom"  Background="White"
+        <InkCanvas x:Name="main_draw_canvas" DockPanel.Dock="Bottom"  Background="White"
                 MouseDown="main_draw_canvas_MouseDown"
                 MouseUp="main_draw_canvas_MouseUp"
                 MouseMove="main_draw_canvas_MouseMove"
-                MouseEnter="main_draw_canvas_MouseEnter" 
-                MouseLeave="main_draw_canvas_MouseLeave"
                 MouseRightButtonDown="main_draw_canvas_MouseRightButtonDown">
-        </Canvas>
+        </InkCanvas>
     </DockPanel>
 </Window>
