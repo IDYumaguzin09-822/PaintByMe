@@ -1,14 +1,21 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 namespace PaintMVPByMe
 {
     public partial class MainWindow : Window
     {
+
+        private const string BitmapFilter = "Bitmap file (*.bmp)|*.bmp";
+        private const string PngFilter = "Png image (*.png)|*.png";
+
         public bool isEllipse = false;
         public bool isRectangle = false;
         public bool isLine = false;
@@ -265,9 +272,56 @@ namespace PaintMVPByMe
 
         }
 
+        private void select_figure_from_canvas_button_Checked(object sender, RoutedEventArgs e)
+        {
+            main_draw_canvas.EditingMode = InkCanvasEditingMode.Select;
+        }
+
+        private void select_figure_from_canvas_button_Unchecked(object sender, RoutedEventArgs e)
+        {
+            main_draw_canvas.EditingMode = InkCanvasEditingMode.None;
+        }
+
         private void main_draw_canvas_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             main_draw_canvas.Children.RemoveAt(main_draw_canvas.Children.Count - 1);
         }
+
+
+        private void menuSave_Click(object sender, RoutedEventArgs e)
+        {
+            var saveDialog = new SaveFileDialog
+            {
+                Filter = $"{PngFilter}|{BitmapFilter}",
+                DefaultExt = "png",
+                AddExtension = true
+            };
+            if (saveDialog.ShowDialog(this).GetValueOrDefault(false))
+            {
+                SaveCanvas(saveDialog);
+            }
+
+        }
+        private void SaveCanvas(SaveFileDialog saveDialog)
+        {
+            if (saveDialog == null) throw new ArgumentNullException(nameof(saveDialog));
+
+            var rtb = new RenderTargetBitmap((int)main_draw_canvas.RenderSize.Width,
+                (int)main_draw_canvas.RenderSize.Height + (int)bias, 96d, 96d, PixelFormats.Default);
+
+            rtb.Render(main_draw_canvas);
+            var encoder = saveDialog.SafeFileName.Split(".")[1] switch
+            {
+                "png" => (BitmapEncoder)new PngBitmapEncoder(),
+                "bmp" => new BmpBitmapEncoder(),
+                _ => null
+            };
+            encoder?.Frames.Add(BitmapFrame.Create(rtb));
+            var path = saveDialog.FileName;
+            using var fs = System.IO.File.OpenWrite(path);
+            encoder?.Save(fs);
+        }
+
     }
+
 }

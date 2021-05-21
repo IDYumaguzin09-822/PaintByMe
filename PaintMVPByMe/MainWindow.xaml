@@ -27,18 +27,15 @@
         <Menu x:Name="menu1" DockPanel.Dock="Top">
             <MenuItem Header="File">
                 <MenuItem x:Name="menuOpen" Header="Open"/>
-                <MenuItem x:Name="menuSave" Header="Save"/>
+                <MenuItem x:Name="menuSave" Header="Save" Click="menuSave_Click"/>
                 <MenuItem x:Name="menuSaveAs" Header="Save As"/>
                 <MenuItem x:Name="menuPrint" Header="Print"/>
                 <MenuItem Header="Exit"/>
             </MenuItem>
         </Menu>
         <Canvas Background="#bbede6" DockPanel.Dock="Top" Height="100" VerticalAlignment="Top">
-            <Button x:Name="fill_figure_button" Click="fill_figure_button_Click" Height="50" Width="50" Canvas.Left="100" Canvas.Top="20">
-                <Button.Content>
-                    <Image Source="images/line_image.png"/>
-                </Button.Content>
-            </Button>
+            <ToggleButton x:Name="fill_figure_button" Click="fill_figure_button_Click" Height="40" Width="40" Canvas.Left="115" Canvas.Top="20"/>
+            <ToggleButton x:Name="select_figure_from_canvas_button" Checked="select_figure_from_canvas_button_Checked" Unchecked="select_figure_from_canvas_button_Unchecked" Height="40" Width="40" Canvas.Left="60" Canvas.Top="20"/>
             <ComboBox Name="StrokeThicknessList" Height="20" Width="90" Canvas.Left="170" Canvas.Top="20" SelectionChanged="StrokeThicknessList_SelectionChanged">
                 <TextBlock>1</TextBlock>
                 <TextBlock>2</TextBlock>
